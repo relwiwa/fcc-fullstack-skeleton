@@ -1,15 +1,25 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const helmet = require('helmet');
-const path = require('path');
 
 const app = express();
+const keys = require('./config/keys');
 const port = process.env.PORT || 3000;
 
 // Helmet setup to add some more security
 app.use(helmet());
 
+// Setup retrieval of POST data via body parser
+app.use(bodyParser.json());
+
+// Setup Mongoose/MongoDB
+require('./services/mongoose')();
+
 // Static files setup
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static('./static'));
+
+// Routes setup
+require('./routes/user-routes')(app);
 
 // CORS setup
 app.use((req, res, next) => {
@@ -18,10 +28,6 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE, OPTIONS');
   next();
 });
-
-// Routes setup
-const userRoutes = require(path.join(__dirname, 'routes', 'user-routes'));
-app.use('/user', userRoutes);
 
 // Server setup
 app.listen(port, (err, res) => {
