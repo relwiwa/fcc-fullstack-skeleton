@@ -1,7 +1,7 @@
 {
-  "name": "fcc-fullstack-boilerplate",
+  "name": "fcc-server-skeleton",
   "version": "1.0.0",
-  "description": "A boilerplate for developing the fullstack freeCodeCamp projects that will provide user handling",
+  "description": "A skeleton for the server-side to develop the full-stack freeCodeCamp projects",
   "main": "index.js",
   "scripts": {
     "serve:server": "nodemon index.js"
@@ -13,6 +13,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "helmet": "^3.12.0",
-    "mongoose": "^5.0.15"
+    "mongoose": "^5.0.15",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
   }
 }

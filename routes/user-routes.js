@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 const User = mongoose.model('users');
 
@@ -49,4 +50,27 @@ module.exports = (app) => {
       });
     }
   );
+
+  app.post('/user/signin', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Authentication failed: An unexpected error happened',
+        });
+      }
+      if (!user) {
+        return res.status(401).json({
+          message: 'Authentication failed: Username and/or password were not correct',
+        });
+      }
+      else {
+        return res.status(201).json({
+          message: 'Authentication succeeded: User was signed in successfully',
+          // Send JWT instead
+          userId: user.id,
+        });  
+      }
+    })(req, res, next);
+  });
+
 };

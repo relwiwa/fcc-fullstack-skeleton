@@ -18,9 +18,6 @@ require('./services/mongoose')();
 // Static files setup
 app.use(express.static('./static'));
 
-// Routes setup
-require('./routes/user-routes')(app);
-
 // CORS setup
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,6 +25,12 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE, OPTIONS');
   next();
 });
+
+// Passport setup
+require('./services/passport')(app);
+
+// Routes setup
+require('./routes/user-routes')(app);
 
 // Server setup
 app.listen(port, (err, res) => {
