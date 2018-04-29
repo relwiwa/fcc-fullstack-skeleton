@@ -52,13 +52,13 @@ module.exports = (app) => {
   );
 
   app.post('/user/signin', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', (err, userJwt, info) => {
       if (err) {
         return res.status(500).json({
           message: 'Authentication failed: An unexpected error happened',
         });
       }
-      if (!user) {
+      if (!userJwt) {
         return res.status(401).json({
           message: 'Authentication failed: Username and/or password were not correct',
         });
@@ -66,8 +66,7 @@ module.exports = (app) => {
       else {
         return res.status(201).json({
           message: 'Authentication succeeded: User was signed in successfully',
-          // Send JWT instead
-          userId: user.id,
+          userId: userJwt,
         });  
       }
     })(req, res, next);

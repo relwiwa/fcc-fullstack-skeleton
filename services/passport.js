@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const keys = require('../config/keys');
+const signJwt = require('./jwt').signJwt;
 const User = mongoose.model('users');
 
 module.exports = (app) => {
@@ -21,7 +21,8 @@ module.exports = (app) => {
           .then(passwordCompareResult => {
             // password did match
             if (passwordCompareResult) {
-              done(null, existingUser);
+              const jwt = signJwt(existingUser.id);
+              done(null, jwt);
             }
             // password did not match
             else {
