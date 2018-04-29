@@ -31,6 +31,7 @@ require('./services/passport')(app);
 
 // Routes setup
 require('./routes/user-routes')(app);
+require('./routes/item-routes')(app);
 
 // Server setup
 app.listen(port, (err, res) => {

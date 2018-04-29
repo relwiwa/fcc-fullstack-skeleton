@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const signJwt = require('./jwt').signJwt;
-const User = mongoose.model('users');
+const User = mongoose.model('User');
 
 module.exports = (app) => {
   passport.use(new LocalStrategy({
