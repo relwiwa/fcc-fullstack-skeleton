@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const itemSchema = new Schema({
-  headline: {
-    type: String,
-    required: true,
-  },
   content: {
     type: String,
     required: true,
@@ -13,6 +9,10 @@ const itemSchema = new Schema({
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
+  },
+  headline: {
+    type: String,
     required: true,
   },
 });

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 const Item = mongoose.model('Item');
 
@@ -33,5 +34,30 @@ module.exports = (app) => {
       });
     });
   });
+
+  app.post(
+    '/item',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+      // validation
+      new Item({
+        content: req.body.content,
+        headline: req.body.headline,
+        creator: req.user.id,
+      })
+      .save()
+      .then(newItem => {
+        return res.json({
+          item: newItem,
+          message: 'New item was saved successfully',
+        });
+      })
+      .catch(error => {
+        return res.sendStatus(500).json({
+          message: 'An error happened while saving this item',
+        });
+      })
+    }
+  );
 
 };

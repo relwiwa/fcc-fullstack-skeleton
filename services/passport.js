@@ -1,9 +1,12 @@
 const bcrypt = require('bcrypt');
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const passport = require('passport');
 
 const signJwt = require('./jwt').signJwt;
+const keys = require('../config/keys');
 const User = mongoose.model('User');
 
 module.exports = (app) => {
@@ -44,6 +47,27 @@ module.exports = (app) => {
         done(error);
       });
     },
+  ));
+
+  passport.use(new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromBodyField('jwtToken'),
+      secretOrKey: keys.jwtSecret,
+    },
+    (payload, done) => {
+      User.findById(payload.data)
+      .then(user => {
+        if (user) {
+          return done(null, user);
+        }
+        else {
+          return done(null, false);
+        }        
+      })
+      .catch(error => {
+        return done(error, false);        
+      });
+    }
   ));
 
   app.use(passport.initialize());

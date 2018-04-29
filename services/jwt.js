@@ -7,4 +7,5 @@ module.exports = {
     keys.jwtSecret,
     { expiresIn: 24 * 60 * 60 },
   ),
+  verifyJwt: (jwtToken) => jwt.verify(jwtToken, keys.jwtSecret),
 };
