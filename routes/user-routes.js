@@ -66,7 +66,7 @@ module.exports = (app) => {
       else {
         return res.status(201).json({
           message: 'Authentication succeeded: User was signed in successfully',
-          userId: userJwt,
+          userJwt: userJwt,
         });  
       }
     })(req, res, next);
