@@ -12,6 +12,7 @@ const User = mongoose.model('User');
 module.exports = (app) => {
   passport.use(new LocalStrategy({
       usernameField: 'email',
+      session: false,
     },
     // refactor to usage of Promises
     (username, password, done) => {
