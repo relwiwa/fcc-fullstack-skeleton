@@ -4,7 +4,7 @@
   "description": "A skeleton for the server-side to develop the full-stack freeCodeCamp projects",
   "main": "index.js",
   "scripts": {
-    "serve:server": "nodemon index.js"
+    "serve": "nodemon index.js"
   },
   "author": "Walter",
   "license": "MIT",
