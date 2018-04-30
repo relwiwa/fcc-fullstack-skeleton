@@ -14,7 +14,7 @@ module.exports = (app) => {
       });      
     })
     .catch(error => {
-      return res.sendStatus(500).json({
+      return res.status(500).json({
         message: 'An error occurred while performing the query for items',
       });
     });
@@ -29,7 +29,7 @@ module.exports = (app) => {
       });
     })
     .catch(error => {
-      return res.sendStatus(500).json({
+      return res.status(500).json({
         message: 'An error occurred while performing the query for this item',
       });
     });
@@ -53,11 +53,51 @@ module.exports = (app) => {
         });
       })
       .catch(error => {
-        return res.sendStatus(500).json({
+        return res.status(500).json({
           message: 'An error happened while saving this item',
         });
       })
     }
   );
+
+  app.patch(
+    '/item/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+      console.log(req.user);
+      // check whether authorized user is creator of item before db query
+      // validation
+      const query = {
+        _id: req.params.id,
+        creator: req.user.id,
+      };
+      // validation
+      const update = {
+        $set: {
+          content: req.body.content,
+          headline: req.body.headline,
+        },
+      };
+      Item.findOneAndUpdate(query, update, { new: true })
+      .then(updatedItem => {
+        if (updatedItem) {
+          return res.json({
+            item: updatedItem,
+            message: 'Item was updated successfully',
+          });
+        }
+        return res.status(500).json({
+          message: 'No such item or you are not authorized to update this item',
+        });
+      })
+      .catch(error => {
+        return res.status(500).json({
+          message: 'An error happened while updating this item',
+        });
+      });
+    }
+  );
+
+
 
 };
