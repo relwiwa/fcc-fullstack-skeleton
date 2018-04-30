@@ -64,7 +64,6 @@ module.exports = (app) => {
     '/item/:id',
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
-      console.log(req.user);
       // check whether authorized user is creator of item before db query
       // validation
       const query = {
@@ -98,6 +97,34 @@ module.exports = (app) => {
     }
   );
 
-
+  app.delete(
+    '/item/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+      console.log('xxx');
+      // check whether authorized user is creator of item before db query
+      // validation
+      const query = {
+        _id: req.params.id,
+        creator: req.user.id,
+      };
+      Item.findOneAndRemove(query)
+      .then(deletedItem => {
+        if (deletedItem) {
+          return res.json({
+            message: 'Item was deleted successfully',
+          });
+        }
+        return res.status(500).json({
+          message: 'No such item or you are not authorized to delete this item',
+        });
+      })
+      .catch(error => {
+        return res.status(500).json({
+          message: 'An error happened while deleting this item',
+        });
+      });
+    }
+  );
 
 };
