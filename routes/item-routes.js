@@ -20,6 +20,24 @@ module.exports = (app) => {
     });
   });
 
+  app.get('/items/user/:userId', (req, res) => {
+    // validate req.params.userId
+    Item.find({
+      creator: req.params.userId,
+    })
+    .then(response => {
+      return res.json({
+        items: response,
+      });      
+    })
+    .catch(error => {
+      return res.status(500).json({
+        message: 'An error occurred while performing the query for items',
+      });
+    });
+  });
+
+
   app.get('/item/:id', (req, res) => {
     // validate req.params.id
     Item.findById(req.params.id)
